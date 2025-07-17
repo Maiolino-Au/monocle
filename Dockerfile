@@ -54,5 +54,14 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN R -e "install.packages('IRkernel')" \
     R -e "IRkernel::installspec(user = FALSE)"
 
+# Install the monocle3 branch of garnett
+RUN R -e "BiocManager::install(c('org.Mm.eg.db', 'org.Hs.eg.db'))" \
+    R -e "devtools::install_github('cole-trapnell-lab/garnett', ref='monocle3')"
+
+RUN R -e "install.packages(c('openai', 'enrichR', 'pachwork', 'rtracklayer', 'tinytex'))" 
+# RUN R -e "remotes::install_github('Winnie09/GPTCelltype')" 
+RUN R -e "remotes::install_github('immunogenomics/presto')"
+# To add: SingleR
+
 ENV SHELL=/bin/bash
 CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=9999", "--no-browser", "--allow-root", "--ServerApp.allow_origin='*'", "--ServerApp.token=''"]
